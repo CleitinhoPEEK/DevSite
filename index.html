@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#081427">
+  <meta name="application-name" content="Finances">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Finances">
+  <link rel="manifest" href="/manifest.webmanifest?v=20260226-26">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <title>Painel Financeiro</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<section id="intro-splash" class="intro-splash" aria-hidden="true">
+  <canvas id="intro-splash-canvas" class="intro-splash-canvas" aria-hidden="true"></canvas>
+  <div class="intro-splash-brand" role="presentation">
+    <div class="intro-splash-logo-svg">
+      <svg viewBox="0 0 200 200" class="logo-svg-pro">
+        <defs>
+          <linearGradient id="hexGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#33d6ff"/>
+            <stop offset="25%" stop-color="#4fa0ff"/>
+            <stop offset="50%" stop-color="#ff3ca6"/>
+            <stop offset="75%" stop-color="#ffca45"/>
+            <stop offset="100%" stop-color="#8a5cff"/>
+          </linearGradient>
+
+          <filter id="outerGlow">
+            <feGaussianBlur stdDeviation="6" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+
+          <clipPath id="hexInnerClip">
+            <polygon points="100,34 158,67 158,133 100,166 42,133 42,67"/>
+          </clipPath>
+        </defs>
+
+        <polygon class="hex-outer"
+          points="100,12 176,56 176,144 100,188 24,144 24,56"
+          fill="url(#hexGradient)"
+          filter="url(#outerGlow)"
+        />
+
+        <polygon class="hex-inner"
+          points="100,34 158,67 158,133 100,166 42,133 42,67"
+          fill="#121212"
+        />
+
+        <path class="arrow-pro"
+          d="M48 130 C 86 154, 104 132, 152 84"
+          fill="none"
+          stroke="#ffffff"
+          stroke-width="7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+
+        <g clip-path="url(#hexInnerClip)">
+          <rect class="bar-pro bar1" x="66" y="118" width="16" height="45" rx="4"/>
+          <rect class="bar-pro bar2" x="92" y="98" width="16" height="72" rx="4"/>
+          <rect class="bar-pro bar3" x="118" y="80" width="16" height="82" rx="4"/>
+        </g>
+
+        <path class="arrow-head-pro"
+          d="M158 76 L141 85 L153 97 Z"
+          fill="#ffffff"
+        />
+      </svg>
+    </div>
+    <div class="intro-splash-progress">
+      <span class="intro-splash-progress-fill"></span>
+    </div>
+  </div>
+  <div class="intro-splash-wordmark" aria-hidden="true">
+    <div class="intro-splash-wordmark-text">NEXO</div>
+  </div>
+</section>
+
+<section id="notificacoes-hoje" class="notificacoes-hoje" aria-live="polite" hidden>
+  <button id="btn-notificacoes-hoje" class="notificacoes-trigger" type="button" aria-label="Abrir notificaÃ§Ãµes de pagamentos" aria-expanded="false" aria-controls="notificacoes-hoje-painel">
+    <i class="fa-solid fa-bell" aria-hidden="true"></i>
+    <span id="notificacoes-hoje-badge" class="notificacoes-badge">0</span>
+  </button>
+  <div id="notificacoes-hoje-painel" class="notificacoes-painel" hidden>
+    <div class="notificacoes-header">
+      <span class="notificacoes-header-principal">
+        <i class="fa-solid fa-bell" aria-hidden="true"></i>
+        <strong id="notificacoes-hoje-titulo">Pagamentos de hoje</strong>
+      </span>
+      <button id="btn-notificacoes-hoje-alternar" class="notificacoes-header-toggle" type="button" aria-label="Ver vencidas" title="Ver vencidas">
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </button>
+    </div>
+    <ul id="notificacoes-hoje-lista" class="notificacoes-lista"></ul>
+  </div>
+</section>
+
+<div class="app-container sidebar-closed" id="app-wrapper">
+  <div id="overlay-mobile" onclick="toggleSidebar()"></div>
+
+  <button id="toggle-sidebar" onclick="toggleSidebar()" aria-label="Abrir menu">
+    <img src="logo2.png" alt=" loading="lazy" decoding="async">
+  </button>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="botoes-financeiros">
+        <button class="btn-card btn-menu-app" onclick="voltarComSidebarFechada('menu.html')" aria-label="Abrir menu do aplicativo">
+          <i class="fa-solid fa-table-cells-large"></i>
+          <span>Menu</span>
+        </button>
+
+      <button class="btn-card btn-economias" onclick="window.location.href='economias.html'">
+        <i class="fa-solid fa-piggy-bank"></i>
+        <span>Economias</span>
+      </button>
+<button class="btn-card btn-despesas" onclick="window.location.href='despesas.html'">
+        <i class="fa-solid fa-file-invoice-dollar"></i>
+        <span>Despesas</span>
+      </button>
+    </div>
+
+    <nav id="menu-meses" class="menu-meses-grid"></nav>
+
+    <div class="backup-area">
+      <button class="btn-backup btn-backup-executive" onclick="irParaResumoAnoExecutivo()">
+        <i class="fa-solid fa-user-tie"></i>
+        <span>Executivo</span>
+      </button>
+
+      <button id="btn-tema" class="btn-tema-toggle" onclick="alternarTema()">
+        Mudar tema
+      </button>
+
+      <div class="configuracoes-menu">
+        <button type="button" class="btn-configuracoes-toggle" onclick="togglePainelConfiguracoes(this)" aria-expanded="false">
+          <span class="btn-configuracoes-principal">
+            <i class="fa-solid fa-gear"></i>
+            <span>ConfiguraÃ§Ãµes</span>
+          </span>
+          <i class="fa-solid fa-chevron-down config-seta"></i>
+        </button>
+
+        <div class="configuracoes-menu-conteudo" aria-hidden="true">
+          <button class="btn-backup btn-backup-export" onclick="exportarDados()">
+            <i class="fa-solid fa-file-export"></i>
+            <span>Exportar backup</span>
+          </button>
+          <button class="btn-backup btn-backup-import" onclick="document.getElementById('input-import').click()">
+            <i class="fa-solid fa-file-import"></i>
+            <span>Importar backup</span>
+          </button>
+          <input type="file" id="input-import" style="display:none" onchange="importarDados(event)" accept=".json">
+
+          <hr class="backup-divider">
+
+          <button class="btn-reset" onclick="resetarSistema()">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Zerar tudo</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header>
+      <div class="titulo-mes-nav">
+        <button class="btn-mes-nav" type="button" onclick="navegarMesTitulo(-1)" aria-label="MÃªs anterior">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <h1 id="titulo-pagina"></h1>
+        <button class="btn-mes-nav" type="button" onclick="navegarMesTitulo(1)" aria-label="PrÃ³ximo mÃªs">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="dashboard" id="painel-resumo">
+        <div class="card card-atrasado">
+            <h3>Atrasado</h3>
+            <p id="totalAtrasados">R$ 0,00</p>
+        </div>
+        <div class="card card-pendente">
+            <h3>Restante</h3>
+            <p id="totalPendentes">R$ 0,00</p>
+        </div>
+        <div class="card card-recebido">
+            <h3>Recebido</h3>
+            <p id="totalRecebido">R$ 0,00</p>
+        </div>
+      </div>
+
+      <button id="btn-abrir-cadastro" onclick="toggleFormCadastro()">
+          <span class="btn-text">Novo cadastro</span>
+          <span class="btn-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+      </button>
+
+      <div class="busca-container">
+        <input type="text" id="buscaNome" placeholder="Buscar por nome ou situaÃ§Ã£o (devendo, a pagar, pagos...)">
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-aba="todos" onclick="mudarAba('todos')">Todos</button>
+        <button class="tab-btn" data-aba="atrasados" onclick="mudarAba('atrasados')">Devendo</button>
+        <button class="tab-btn" data-aba="pendentes" onclick="mudarAba('pendentes')">A pagar</button>
+        <button class="tab-btn" data-aba="pagos" onclick="mudarAba('pagos')">Pagos</button>
+        <button class="tab-btn" data-aba="parcelados" onclick="mudarAba('parcelados')">Parcelados</button>
+        <span id="contador-busca" class="contador-busca" aria-live="polite" hidden></span>
+      </div>
+    </header>
+
+    <ul id="listaPrincipal"></ul>
+  </main>
+</div>
+
+<div id="modalWhatsapp" class="modal-geral">
+  <div class="modal-content">
+    <span class="close-modal" onclick="fecharModalWhats()">&times;</span>
+    <h3 id="whats-titulo" style="margin-bottom: 15px;">Enviar mensagem</h3>
+    <div id="lista-mensagens" style="display: flex; flex-direction: column; gap: 10px;"></div>
+  </div>
+</div>
+
+<div id="container-cadastro" class="modal-geral">
+  <section class="modal-content">
+    <span class="close-modal" onclick="toggleFormCadastro()">&times;</span>
+    <h3>Novo lanÃ§amento</h3>
+    <div class="form-grid">
+      <input type="text" id="nome" placeholder="Nome do cliente">
+      <input type="tel" id="telefone" placeholder="WhatsApp">
+      <div style="display:flex; gap:10px;">
+        <input type="number" id="valor" placeholder="Valor total" style="flex:1">
+        <input type="date" id="data" style="flex:1">
+      </div>
+      <select id="repetir">
+        <option value="1">Ãšnica</option>
+        <option value="4">4x semanal</option>
+        <option value="8">8x semanal</option>
+        <option value="12">12x semanal</option>
+      </select>
+      <button class="btn-acao-principal" onclick="adicionarCobranca()">Cadastrar</button>
+    </div>
+  </section>
+</div>
+
+<div id="modalEdicao" class="modal-geral">
+  <div class="modal-content">
+    <span class="close-modal" onclick="fecharModal()">&times;</span>
+    <h3>Editar lanÃ§amento</h3>
+    <input type="hidden" id="edit-id">
+    <div class="form-edit">
+      <label>Nome</label><input type="text" id="edit-nome">
+      <label>WhatsApp</label><input type="tel" id="edit-telefone" placeholder="Numero com DDD">
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1"><label>Total</label><input type="text" id="edit-valor" inputmode="decimal" placeholder="0,00"></div>
+        <div style="flex:1"><label>Pago</label><input type="text" id="edit-pago-parcial" inputmode="decimal" placeholder="0,00"></div>
+      </div>
+      <label>Data</label><input type="date" id="edit-data">
+      <button class="btn-salvar-modal" onclick="salvarEdicao()">Atualizar dados</button>
+    </div>
+  </div>
+</div>
+
+<div class="brand-logo brand-logo--watermark" aria-hidden="true">
+  <img src="logo2.png" alt=" loading="lazy" decoding="async">
+</div>
+
+<script src="common.js"></script>
+<script src="i18n.js"></script>
+<script src="i18n-extra.js"></script>
+<script src="pwa-register.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+

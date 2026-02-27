@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#081427">
+    <meta name="application-name" content="Finances">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Finances">
+    <link rel="manifest" href="/manifest.webmanifest?v=20260226-26">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <title>Minhas Economias</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="pagina-economias">
+    <div class="app-container has-floating-back sidebar-closed" id="app-wrapper">
+        <div id="overlay-mobile" onclick="toggleSidebar()"></div>
+        <button id="toggle-sidebar" onclick="toggleSidebar()" aria-label="Abrir menu">
+            <img src="logo2.png" alt=" loading="lazy" decoding="async">
+        </button>
+        <button class="btn-voltar-flutuante" onclick="voltarComSidebarFechada('index.html')" aria-label="Ir para inÃ­cio">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <button class="btn-resumo-economias-topo" onclick="window.location.href='resumo-economias.html?ano=2026'" aria-label="Abrir resumo de economias 2026">
+            <i class="fa-solid fa-chart-column"></i>
+            <span>Resumo</span>
+        </button>
+        <button class="btn-modo-comercio-topo" onclick="abrirModoComercio()" aria-label="Abrir modo comÃ©rcio">
+            <i class="fa-solid fa-cash-register"></i>
+            <span>ComÃ©rcio</span>
+        </button>
+
+            <aside class="sidebar" id="sidebar">
+                <div class="botoes-financeiros">
+                <button class="btn-card btn-voltar-sidebar" onclick="voltarComSidebarFechada('index.html')" aria-label="Ir para inÃ­cio">
+                    <i class="fa-solid fa-house"></i>
+                    <span>InÃ­cio</span>
+                </button>
+        <button class="btn-card btn-menu-app" onclick="voltarComSidebarFechada('menu.html')" aria-label="Abrir menu do aplicativo">
+          <i class="fa-solid fa-table-cells-large"></i>
+          <span>Menu</span>
+        </button>
+
+
+
+<button class="btn-card btn-despesas" onclick="window.location.href='despesas.html'">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                        <span>Despesas</span>
+                    </button>
+                </div>
+
+                <nav id="menu-meses" class="menu-meses-grid"></nav>
+
+                <div class="backup-area">
+      <button class="btn-backup btn-backup-executive" onclick="irParaResumoAnoExecutivo()">
+        <i class="fa-solid fa-user-tie"></i>
+        <span>Executivo</span>
+      </button>
+
+      <button id="btn-tema" class="btn-tema-toggle" onclick="alternarTema()">
+                    Mudar Tema
+                </button>
+
+      <div class="configuracoes-menu">
+        <button type="button" class="btn-configuracoes-toggle" onclick="togglePainelConfiguracoes(this)" aria-expanded="false">
+          <span class="btn-configuracoes-principal">
+            <i class="fa-solid fa-gear"></i>
+            <span>ConfiguraÃ§Ãµes</span>
+          </span>
+          <i class="fa-solid fa-chevron-down config-seta"></i>
+        </button>
+
+        <div class="configuracoes-menu-conteudo" aria-hidden="true">
+          <button class="btn-backup btn-backup-export" onclick="exportarDados()">
+            <i class="fa-solid fa-file-export"></i>
+            <span>Exportar backup</span>
+          </button>
+          <button class="btn-backup btn-backup-import" onclick="document.getElementById('input-import').click()">
+            <i class="fa-solid fa-file-import"></i>
+            <span>Importar backup</span>
+          </button>
+          <input type="file" id="input-import" style="display:none" onchange="importarDados(event)" accept=".json">
+
+          <hr class="backup-divider">
+
+          <button class="btn-reset" onclick="resetarSistema()">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Zerar tudo</span>
+          </button>
+        </div>
+      </div>
+
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <h1 class="titulo-economias">EXTRATO</h1>
+            <p class="subtitulo-economias">Acompanhe movimentaÃ§Ãµes da carteira e poupanÃ§a em um painel simples.</p>
+
+            <div class="tabs-eco-container">
+                <button class="tab-eco active" onclick="mudarAbaEconomia('carteira')">
+                    <i class="fa-solid fa-wallet"></i> Carteira
+                </button>
+                <button class="tab-eco" onclick="mudarAbaEconomia('poupanca')">
+                    <i class="fa-solid fa-piggy-bank"></i> PoupanÃ§a
+                </button>
+            </div>
+
+            <div id="aba-carteira">
+                <div class="painel-economias">
+                    <div class="saldo-grande">
+                        <small>Saldo disponÃ­vel (carteira)</small>
+                        <h2 id="saldo-tela-cheia">R$ 0,00</h2>
+                    </div>
+
+                    <div class="controles-economias">
+                        <div class="input-grupo">
+                            <input type="number" id="valor-operacao" placeholder="R$ 0,00">
+                            <input type="text" id="desc-operacao" placeholder="DescriÃ§Ã£o (Ex: Viagem)">
+                        </div>
+                        <div class="botoes-acao">
+                            <button onclick="realizarOperacao('depositar')" class="btn-depositar">
+                                <i class="fa-solid fa-arrow-down"></i> <span data-i18n="economias.actions.in">Entrou</span>
+                            </button>
+                            <button onclick="realizarOperacao('sacar')" class="btn-sacar">
+                                <i class="fa-solid fa-arrow-up"></i> <span data-i18n="economias.actions.out">Saiu</span>
+                            </button>
+
+                            <button onclick="abrirModalTransferencia()" class="btn-transferir">
+                                <i class="fa-solid fa-exchange-alt"></i> <span data-i18n="economias.actions.transferToSavings">Transferir para poupança</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="extrato-carteira-toolbar" id="extrato-carteira-toolbar">
+                    <h3 class="titulo-extrato">Extrato da carteira</h3>
+                    <label class="filtro-forma-pagamento-wrap" for="filtro-forma-pagamento-extrato">
+                        <span>MÃ©todo</span>
+                        <select id="filtro-forma-pagamento-extrato" aria-label="Filtrar extrato por mÃ©todo de pagamento">
+                            <option value="todos">Todos</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="lista-extrato" id="lista-extrato"></div>
+            </div>
+
+            <div id="aba-poupanca" style="display: none;">
+                <div class="painel-economias painel-poupanca">
+                    <div class="saldo-grande">
+                        <small>Total investido (poupanÃ§a)</small>
+                        <h2 id="saldo-poupanca">R$ 0,00</h2>
+                    </div>
+
+                    <div class="controles-economias">
+                        <div class="input-grupo">
+                            <input type="number" id="valor-poupanca" placeholder="R$ 0,00">
+                            <input type="text" id="desc-poupanca" placeholder="DescriÃ§Ã£o (Ex: Guardar para carro)">
+                        </div>
+                        <div class="botoes-acao">
+                            <button onclick="operarPoupanca('depositar')" class="btn-depositar btn-poupanca-depositar">
+                                <i class="fa-solid fa-piggy-bank"></i> <span data-i18n="economias.actions.save">Guardar</span>
+                            </button>
+                            <button onclick="operarPoupanca('sacar')" class="btn-sacar btn-poupanca-resgatar">
+                                <i class="fa-solid fa-hand-holding-dollar"></i> <span data-i18n="economias.actions.withdraw">Resgatar</span>
+                            </button>
+
+                            <button onclick="abrirModalResgate()" class="btn-resgatar-total">
+                                <i class="fa-solid fa-reply"></i> <span data-i18n="economias.actions.sendToWallet">Enviar para carteira</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="titulo-extrato">HistÃ³rico da poupanÃ§a</h3>
+                <div class="lista-extrato" id="extrato-poupanca"></div>
+            </div>
+        </main>
+    </div>
+
+    <div class="brand-logo brand-logo--watermark" aria-hidden="true">
+        <img src="logo2.png" alt=" loading="lazy" decoding="async">
+    </div>
+
+    <script src="common.js"></script>
+<script src="i18n.js"></script>
+<script src="i18n-extra.js"></script>
+<script src="pwa-register.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#081427">
+    <meta name="application-name" content="Finances">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Finances">
+    <link rel="manifest" href="/manifest.webmanifest?v=20260226-26">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <title>Modo ComÃ©rcio | Finances</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="pagina-comercio">
+    <main class="comercio-main">
+        <header class="comercio-header">
+            <div class="comercio-header-textos">
+                <p class="comercio-kicker">Modo ComÃ©rcio</p>
+                <h1>Central de vendas</h1>
+                <p class="comercio-subtitulo">
+                    Monte uma comanda com vÃ¡rios itens, aplique desconto/acrÃ©scimo e exporte manualmente para o extrato da carteira.
+                </p>
+            </div>
+            <div class="comercio-header-acoes">
+                                <button type="button" class="comercio-btn comercio-btn-ghost" id="btn-comercio-abrir-menu" onclick="window.location.href=(window.FinCommon?.resolveMenuHrefWithAutoPatchNotes?.('menu.html') || 'menu.html')">
+                    <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
+                    <span>Menu</span>
+                </button>
+<button type="button" class="comercio-btn comercio-btn-ghost" id="btn-comercio-abrir-economias">
+                    <i class="fa-solid fa-wallet" aria-hidden="true"></i>
+                    <span>Economias</span>
+                </button>
+            </div>
+        </header>
+
+        <section class="comercio-resumo" aria-label="Resumo de vendas do dia">
+            <article class="comercio-resumo-card">
+                <span>Total do dia</span>
+                <strong id="comercio-total-dia">R$ 0,00</strong>
+            </article>
+            <article class="comercio-resumo-card">
+                <span>Pendentes para exportar</span>
+                <strong id="comercio-total-pendente">R$ 0,00</strong>
+            </article>
+            <article class="comercio-resumo-card">
+                <span>Itens vendidos hoje</span>
+                <strong id="comercio-total-itens">0</strong>
+            </article>
+            <article class="comercio-resumo-card">
+                <span>Data</span>
+                <strong id="comercio-data-hoje">--/--/----</strong>
+            </article>
+        </section>
+
+        <section class="comercio-relatorios-wrap" aria-label="RelatÃ³rios diÃ¡rio e semanal">
+            <div class="comercio-section-header comercio-section-header-vendas">
+                <div>
+                    <h2>RelatÃ³rios</h2>
+                    <p>Resumo diÃ¡rio e semanal com totais, pendÃªncias e formas de pagamento.</p>
+                </div>
+                <label class="comercio-label comercio-label-inline" for="comercio-relatorio-periodo">
+                    Detalhar perÃ­odo
+                    <select id="comercio-relatorio-periodo" class="comercio-select comercio-select-inline">
+                        <option value="hoje">Hoje</option>
+                        <option value="7dias" selected>Ãšltimos 7 dias</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="comercio-relatorio-cards">
+                <article class="comercio-relatorio-card">
+                    <span>Hoje â€¢ Total</span>
+                    <strong id="comercio-rel-hoje-total">R$ 0,00</strong>
+                    <small id="comercio-rel-hoje-meta">0 venda(s)</small>
+                </article>
+                <article class="comercio-relatorio-card">
+                    <span>Hoje â€¢ Pendente</span>
+                    <strong id="comercio-rel-hoje-pendente">R$ 0,00</strong>
+                    <small id="comercio-rel-hoje-ticket">Ticket mÃ©dio: R$ 0,00</small>
+                </article>
+                <article class="comercio-relatorio-card">
+                    <span>7 dias â€¢ Total</span>
+                    <strong id="comercio-rel-semana-total">R$ 0,00</strong>
+                    <small id="comercio-rel-semana-meta">0 venda(s)</small>
+                </article>
+                <article class="comercio-relatorio-card">
+                    <span>7 dias â€¢ Pendente</span>
+                    <strong id="comercio-rel-semana-pendente">R$ 0,00</strong>
+                    <small id="comercio-rel-semana-ticket">Ticket mÃ©dio: R$ 0,00</small>
+                </article>
+            </div>
+
+            <div class="comercio-relatorio-formas-wrap">
+                <div class="comercio-relatorio-formas-header">
+                    <h3 id="comercio-relatorio-formas-titulo">Formas de pagamento â€¢ Ãšltimos 7 dias</h3>
+                    <span id="comercio-relatorio-formas-resumo">0 venda(s)</span>
+                </div>
+                <ul id="comercio-relatorio-formas-lista" class="comercio-relatorio-formas-lista"></ul>
+            </div>
+        </section>
+
+        <section class="comercio-painel" aria-label="ConfiguraÃ§Ãµes rÃ¡pidas">
+            <div class="comercio-form-item-wrap">
+                <button type="button" id="btn-comercio-toggle-form-item" class="comercio-btn comercio-btn-add comercio-btn-add-trigger" aria-expanded="false" aria-controls="comercio-form-item">
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                    <span>Adicionar ao catÃ¡logo</span>
+                </button>
+
+                <form id="comercio-form-item" class="comercio-form-item comercio-form-item-popover" autocomplete="off" hidden>
+                    <div class="comercio-form-item-popover-header">
+                        <div>
+                            <strong>Novo item</strong>
+                            <p>Cadastre nome, preÃ§o e custo opcional.</p>
+                        </div>
+                        <button type="button" id="btn-comercio-fechar-form-item" class="comercio-form-item-popover-fechar" aria-label="Fechar cadastro de item">
+                            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <div class="comercio-form-item-campos comercio-form-item-campos-popover">
+                        <input id="comercio-item-nome" type="text" class="comercio-input" placeholder="Ex.: ?gua 500ml" maxlength="48">
+                        <input id="comercio-item-preco" type="text" class="comercio-input comercio-input-preco" placeholder="PreÃ§o (ex.: 5,00)" inputmode="decimal">
+                        <input id="comercio-item-custo" type="text" class="comercio-input comercio-input-preco" placeholder="Custo (opcional)" inputmode="decimal">
+                    </div>
+
+                    <div class="comercio-form-item-acoes">
+                        <button type="button" class="comercio-btn comercio-btn-ghost" id="btn-comercio-cancelar-form-item">
+                            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                            <span>Cancelar</span>
+                        </button>
+                        <button type="submit" class="comercio-btn comercio-btn-add">
+                            <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
+                            <span>Salvar item</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <div class="comercio-operacao-layout">
+        <section class="comercio-grid-wrap">
+            <div class="comercio-section-header">
+                <h2>Itens (placas)</h2>
+                <p>Toque nos blocos para adicionar Ã  comanda atual.</p>
+                <div class="comercio-catalogo-header-acoes">
+                    <label class="comercio-label comercio-label-inline" for="comercio-catalogo-busca">
+                        Buscar produto
+                        <div class="comercio-catalogo-busca-wrap">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <input id="comercio-catalogo-busca" type="search" class="comercio-input comercio-catalogo-busca-input" placeholder="Digite o nome do item" autocomplete="off" spellcheck="false">
+                            <button type="button" class="comercio-catalogo-busca-limpar" id="btn-comercio-limpar-busca" aria-label="Limpar busca" title="Limpar busca" hidden>
+                                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div id="comercio-catalogo-grid" class="comercio-catalogo-grid" aria-live="polite"></div>
+        </section>
+
+        <section class="comercio-comanda-wrap" aria-label="Comanda atual">
+            <div class="comercio-section-header comercio-section-header-vendas">
+                <div>
+                    <h2>Comanda atual</h2>
+                    <p id="comercio-comanda-resumo-texto">Monte a comanda tocando nos itens acima.</p>
+                </div>
+                <div class="comercio-comanda-acoes-topo">
+                    <button type="button" class="comercio-btn comercio-btn-ghost" id="btn-comercio-limpar-comanda">
+                        <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+                        <span>Limpar comanda</span>
+                    </button>
+                    <button type="button" class="comercio-btn comercio-btn-primary" id="btn-comercio-finalizar-comanda">
+                        <i class="fa-solid fa-check" aria-hidden="true"></i>
+                        <span>Fechar venda</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="comercio-comanda-config">
+                <div class="comercio-comanda-config-campo">
+                    <label class="comercio-label" for="comercio-comanda-titulo">IdentificaÃ§Ã£o (opcional)</label>
+                    <input id="comercio-comanda-titulo" class="comercio-input" type="text" placeholder="Ex.: Mesa 3 / Cliente JoÃ£o" maxlength="64">
+                </div>
+                <div class="comercio-comanda-config-grid">
+                    <div class="comercio-comanda-config-campo">
+                        <label class="comercio-label" for="comercio-comanda-forma">Forma de pagamento</label>
+                        <select id="comercio-comanda-forma" class="comercio-select"></select>
+                    </div>
+                    <div class="comercio-comanda-config-campo">
+                        <label class="comercio-label" for="comercio-comanda-desconto">Desconto (R$)</label>
+                        <input id="comercio-comanda-desconto" class="comercio-input comercio-input-preco" type="text" inputmode="decimal" placeholder="0,00">
+                    </div>
+                    <div class="comercio-comanda-config-campo">
+                        <label class="comercio-label" for="comercio-comanda-acrescimo">AcrÃ©scimo (R$)</label>
+                        <input id="comercio-comanda-acrescimo" class="comercio-input comercio-input-preco" type="text" inputmode="decimal" placeholder="0,00">
+                    </div>
+                </div>
+            </div>
+
+            <ul id="comercio-comanda-itens" class="comercio-comanda-itens"></ul>
+
+            <div class="comercio-comanda-totais">
+                <div><span>Subtotal</span><strong id="comercio-comanda-subtotal">R$ 0,00</strong></div>
+                <div><span>Desconto</span><strong id="comercio-comanda-desconto-total">R$ 0,00</strong></div>
+                <div><span>AcrÃ©scimo</span><strong id="comercio-comanda-acrescimo-total">R$ 0,00</strong></div>
+                <div class="comercio-comanda-total-final"><span>Total final</span><strong id="comercio-comanda-total-final">R$ 0,00</strong></div>
+            </div>
+        </section>
+        </div>
+
+        <section class="comercio-secoes-tabs-wrap" aria-label="Abas de vendas e extrato">
+            <div class="comercio-secoes-tabs" role="tablist" aria-label="Alternar entre vendas, extrato e relatorio de itens">
+                <button type="button" class="comercio-secoes-tab is-active" id="btn-comercio-tab-vendas" role="tab" aria-selected="true" aria-controls="comercio-panel-vendas" data-comercio-sec-tab="vendas">
+                    <i class="fa-solid fa-list-check" aria-hidden="true"></i>
+                    <span>Lista de vendas do dia</span>
+                </button>
+                <button type="button" class="comercio-secoes-tab" id="btn-comercio-tab-extrato" role="tab" aria-selected="false" aria-controls="comercio-panel-extrato" data-comercio-sec-tab="extrato">
+                    <i class="fa-solid fa-receipt" aria-hidden="true"></i>
+                    <span>Extrato do comÃ©rcio</span>
+                </button>
+                <button type="button" class="comercio-secoes-tab" id="btn-comercio-tab-itens" role="tab" aria-selected="false" aria-controls="comercio-panel-itens" data-comercio-sec-tab="itens">
+                    <i class="fa-solid fa-chart-column" aria-hidden="true"></i>
+                    <span>RelatÃ³rio de itens</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="comercio-vendas-wrap" id="comercio-panel-vendas" role="tabpanel" aria-labelledby="btn-comercio-tab-vendas" data-comercio-sec-panel="vendas">
+            <div class="comercio-section-header comercio-section-header-vendas">
+                <div>
+                    <h2>Lista de vendas do dia</h2>
+                    <p id="comercio-resumo-vendas-texto">Nenhuma venda lanÃ§ada ainda.</p>
+                </div>
+                <div class="comercio-vendas-header-acoes">
+                    <button type="button" class="comercio-btn comercio-btn-ghost" id="btn-comercio-limpar-exportadas">
+                        <i class="fa-solid fa-broom" aria-hidden="true"></i>
+                        <span>Limpar exportadas</span>
+                    </button>
+                </div>
+            </div>
+
+            <ul id="comercio-vendas-lista" class="comercio-vendas-lista"></ul>
+        </section>
+
+        <section class="comercio-extrato-wrap" id="comercio-panel-extrato" role="tabpanel" aria-labelledby="btn-comercio-tab-extrato" data-comercio-sec-panel="extrato" aria-label="Extrato do comÃ©rcio" hidden>
+            <div class="comercio-section-header comercio-section-header-vendas">
+                <div>
+                    <h2>Extrato do comÃ©rcio</h2>
+                    <p>HistÃ³rico consolidado das vendas do modo comÃ©rcio, com custo e lucro estimado.</p>
+                </div>
+                <div class="comercio-extrato-header-acoes">
+                    <div class="comercio-extrato-meta">
+                        <span id="comercio-extrato-meta-texto">0 registro(s)</span>
+                    </div>
+                    <button type="button" class="comercio-btn comercio-btn-primary" id="btn-comercio-exportar">
+                        <i class="fa-solid fa-file-export" aria-hidden="true"></i>
+                        <span>Exportar para extrato</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="comercio-extrato-resumo">
+                <article class="comercio-extrato-resumo-card">
+                    <span>Receita</span>
+                    <strong id="comercio-extrato-total">R$ 0,00</strong>
+                </article>
+                <article class="comercio-extrato-resumo-card">
+                    <span>Custo</span>
+                    <strong id="comercio-extrato-custo">R$ 0,00</strong>
+                </article>
+                <article class="comercio-extrato-resumo-card">
+                    <span>Lucro estimado</span>
+                    <strong id="comercio-extrato-lucro">R$ 0,00</strong>
+                </article>
+                <article class="comercio-extrato-resumo-card">
+                    <span>Exportadas / Pendentes</span>
+                    <strong id="comercio-extrato-status">0 / 0</strong>
+                </article>
+            </div>
+
+            <ul id="comercio-extrato-lista" class="comercio-extrato-lista"></ul>
+        </section>
+
+        <section class="comercio-itens-insights-wrap" id="comercio-panel-itens" role="tabpanel" aria-labelledby="btn-comercio-tab-itens" data-comercio-sec-panel="itens" aria-label="Relatorio de itens" hidden>
+            <div class="comercio-section-header comercio-section-header-vendas">
+                <div>
+                    <h2>RelatÃ³rio de itens</h2>
+                    <p>Desempenho por item com base nas vendas do modo comercio.</p>
+                </div>
+                <div class="comercio-itens-insights-header-acoes">
+                    <label class="comercio-label comercio-label-inline" for="comercio-itens-periodo">
+                        Periodo
+                        <select id="comercio-itens-periodo" class="comercio-select comercio-select-inline"></select>
+                    </label>
+                    <div class="comercio-extrato-meta">
+                        <span id="comercio-itens-periodo-resumo">0 vendas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comercio-itens-insights-cards">
+                <article class="comercio-itens-insights-card">
+                    <span>Item mais vendido</span>
+                    <strong id="comercio-itens-top-qtd-nome">-</strong>
+                    <small id="comercio-itens-top-qtd-meta">0 un.</small>
+                </article>
+                <article class="comercio-itens-insights-card">
+                    <span>Item mais lucrativo</span>
+                    <strong id="comercio-itens-top-lucro-nome">-</strong>
+                    <small id="comercio-itens-top-lucro-meta">R$ 0,00</small>
+                </article>
+                <article class="comercio-itens-insights-card">
+                    <span>Maior faturamento</span>
+                    <strong id="comercio-itens-top-receita-nome">-</strong>
+                    <small id="comercio-itens-top-receita-meta">R$ 0,00</small>
+                </article>
+                <article class="comercio-itens-insights-card">
+                    <span>Itens com vendas</span>
+                    <strong id="comercio-itens-total-vendidos">0</strong>
+                    <small id="comercio-itens-total-unidades">0 un. no periodo</small>
+                </article>
+            </div>
+
+            <div class="comercio-itens-insights-grid">
+                <section class="comercio-itens-insights-bloco">
+                    <div class="comercio-itens-insights-bloco-header">
+                        <h3>Ranking por quantidade</h3>
+                        <span>Top 5</span>
+                    </div>
+                    <ul id="comercio-itens-ranking-qtd" class="comercio-itens-insights-lista"></ul>
+                </section>
+
+                <section class="comercio-itens-insights-bloco">
+                    <div class="comercio-itens-insights-bloco-header">
+                        <h3>Ranking por lucro</h3>
+                        <span>Top 5</span>
+                    </div>
+                    <ul id="comercio-itens-ranking-lucro" class="comercio-itens-insights-lista"></ul>
+                </section>
+
+                <section class="comercio-itens-insights-bloco">
+                    <div class="comercio-itens-insights-bloco-header">
+                        <h3>Itens com baixo giro</h3>
+                        <span>Menor saida</span>
+                    </div>
+                    <ul id="comercio-itens-baixo-giro" class="comercio-itens-insights-lista"></ul>
+                </section>
+
+                <section class="comercio-itens-insights-bloco">
+                    <div class="comercio-itens-insights-bloco-header">
+                        <h3>Resumo do periodo</h3>
+                        <span>Receita x custo</span>
+                    </div>
+                    <ul id="comercio-itens-resumo-periodo" class="comercio-itens-insights-lista comercio-itens-insights-lista-resumo"></ul>
+                </section>
+            </div>
+        </section>
+
+        <p id="comercio-feedback" class="comercio-feedback" aria-live="polite"></p>
+    </main>
+
+    <script src="common.js"></script>
+    <script src="i18n.js"></script>
+<script src="i18n-extra.js"></script>
+    <script src="pwa-register.js"></script>
+    <script src="auth.js"></script>
+    <script src="comercio.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,7 @@
+﻿node_modules/
+.run/
+.vscode/
+.env
+mercado_pago_webhooks.json
+*.log
+*.pid

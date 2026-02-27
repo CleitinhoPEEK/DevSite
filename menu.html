@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#081427">
+  <meta name="application-name" content="Finances">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Finances">
+  <link rel="manifest" href="/manifest.webmanifest?v=20260226-26">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <title>Painel de Controle | Finances</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="pagina-menu-app">
+  <main class="menu-app-shell">
+    <header class="menu-app-hero" aria-label="CabeÃ§alho do menu">
+      <div class="menu-app-hero-main">
+        <p class="menu-app-kicker">Nexo Finances</p>
+        <h1>Painel de Controle</h1>
+        <p class="menu-app-subtitulo">
+          Assuma o comando do sistema em um s&oacute; lugar. Acesse opera&ccedil;&otilde;es, relat&oacute;rios e configura&ccedil;&otilde;es com navega&ccedil;&atilde;o r&aacute;pida por fun&ccedil;&atilde;o.
+        </p>
+
+      </div>
+
+      <div class="menu-app-hero-actions">
+        <button type="button" class="menu-app-btn" id="menu-app-btn-instalar" data-i18n-aria-label="pwa.ui.installAria">
+          <i class="fa-solid fa-download" aria-hidden="true"></i>
+          <span data-i18n="pwa.ui.installButton">Instalar app</span>
+        </button>
+        <button type="button" class="menu-app-btn menu-app-btn-ghost" id="menu-app-btn-tema">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+          <span>Tema</span>
+        </button>
+        <button type="button" class="menu-app-btn menu-app-btn-danger" id="menu-app-btn-sair">
+          <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+          <span>Sair</span>
+        </button>
+        <div class="menu-app-usuario" aria-live="polite">
+          <span class="menu-app-usuario-icone" aria-hidden="true">
+            <i class="fa-solid fa-user-shield"></i>
+          </span>
+          <div class="menu-app-usuario-textos">
+            <small id="menu-app-usuario-papel">SessÃ£o protegida</small>
+            <strong id="menu-app-usuario-nome">Carregando usuÃ¡rio...</strong>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="menu-app-groups" class="menu-app-groups" aria-label="PÃ¡ginas por funÃ§Ã£o"></section>
+  </main>
+
+  <div id="menu-app-patchnotes-modal" class="menu-app-modal" hidden aria-hidden="true">
+    <div class="menu-app-modal-card" role="dialog" aria-modal="true" aria-labelledby="menu-app-patchnotes-title">
+      <button type="button" class="menu-app-modal-close" id="menu-app-patchnotes-close" data-i18n-aria-label="menu.patchNotes.close" data-i18n-title="menu.patchNotes.close" title="Fechar">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
+      <div class="menu-app-modal-header">
+        <p class="menu-app-modal-kicker" data-i18n="menu.patchNotes.kicker">Patch notes</p>
+        <h2 id="menu-app-patchnotes-title" data-i18n="menu.patchNotes.title">Historico de atualizacoes</h2>
+        <p class="menu-app-modal-subtitulo" data-i18n="menu.patchNotes.subtitle">Confira data e hora de lancamento de cada versao e o que foi alterado.</p>
+      </div>
+
+      <section id="menu-app-patchnotes-admin" class="menu-app-patchnotes-admin" hidden>
+        <div class="menu-app-patchnotes-admin-bar">
+          <strong class="menu-app-patchnotes-admin-title" data-i18n="menu.patchNotes.devToolsTitle">Ferramentas de dev</strong>
+          <div class="menu-app-patchnotes-admin-acoes">
+            <button type="button" class="menu-app-btn menu-app-btn-ghost" id="menu-app-patchnotes-btn-new">
+              <i class="fa-solid fa-plus" aria-hidden="true"></i>
+              <span data-i18n="menu.patchNotes.new">Novo patch</span>
+            </button>
+            <button type="button" class="menu-app-btn menu-app-btn-ghost" id="menu-app-patchnotes-btn-export">
+              <i class="fa-solid fa-file-export" aria-hidden="true"></i>
+              <span data-i18n="menu.patchNotes.exportJson">Exportar JSON</span>
+            </button>
+            <button type="button" class="menu-app-btn menu-app-btn-ghost" id="menu-app-patchnotes-btn-import">
+              <i class="fa-solid fa-file-import" aria-hidden="true"></i>
+              <span data-i18n="menu.patchNotes.importJson">Importar JSON</span>
+            </button>
+            <input type="file" id="menu-app-patchnotes-import-file" accept=".json,application/json" hidden>
+          </div>
+        </div>
+
+        <form id="menu-app-patchnotes-form" class="menu-app-patchnotes-form" hidden>
+          <input type="hidden" id="menu-app-patchnotes-form-id">
+
+          <div class="menu-app-patchnotes-form-grid">
+            <label class="menu-app-patchnotes-field">
+              <span data-i18n="menu.patchNotes.labelVersion">Versao</span>
+              <input type="text" id="menu-app-patchnotes-version" placeholder="2026.02.25-01" data-i18n-placeholder="menu.patchNotes.placeholderVersion">
+            </label>
+            <label class="menu-app-patchnotes-field">
+              <span data-i18n="menu.patchNotes.labelDateTime">Data e hora</span>
+              <input type="datetime-local" id="menu-app-patchnotes-datetime">
+            </label>
+          </div>
+
+          <div class="menu-app-patchnotes-form-grid">
+            <label class="menu-app-patchnotes-field">
+              <span data-i18n="menu.patchNotes.labelTitlePt">Titulo (PT-BR)</span>
+              <input type="text" id="menu-app-patchnotes-title-pt" placeholder="Titulo em portugues" data-i18n-placeholder="menu.patchNotes.placeholderTitlePt">
+            </label>
+            <label class="menu-app-patchnotes-field">
+              <span data-i18n="menu.patchNotes.labelTitleEn">Title (EN-US)</span>
+              <input type="text" id="menu-app-patchnotes-title-en" placeholder="Title in English" data-i18n-placeholder="menu.patchNotes.placeholderTitleEn">
+            </label>
+          </div>
+
+          <div class="menu-app-patchnotes-form-grid">
+            <label class="menu-app-patchnotes-field">
+              <span data-i18n="menu.patchNotes.labelChangesPt">Mudancas (PT-BR)</span>
+              <textarea id="menu-app-patchnotes-changes-pt" rows="4" data-i18n-placeholder="menu.patchNotes.placeholderChanges"></textarea>
+            </label>
+            <label class="menu-app-patchnotes-field">
+              <span data-i18n="menu.patchNotes.labelChangesEn">Changes (EN-US)</span>
+              <textarea id="menu-app-patchnotes-changes-en" rows="4" data-i18n-placeholder="menu.patchNotes.placeholderChanges"></textarea>
+            </label>
+          </div>
+
+          <p class="menu-app-patchnotes-form-hint" data-i18n="menu.patchNotes.editorHint">Use uma linha por item de mudanca.</p>
+          <p id="menu-app-patchnotes-form-feedback" class="menu-app-patchnotes-form-feedback" hidden aria-live="polite"></p>
+
+          <div class="menu-app-patchnotes-form-acoes">
+            <button type="button" class="menu-app-btn menu-app-btn-ghost" id="menu-app-patchnotes-btn-cancel-edit">
+              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+              <span data-i18n="menu.patchNotes.cancel">Cancelar</span>
+            </button>
+            <button type="submit" class="menu-app-btn" id="menu-app-patchnotes-btn-save-edit">
+              <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>
+              <span data-i18n="menu.patchNotes.save">Salvar patch</span>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <div id="menu-app-patchnotes-list" class="menu-app-patchnotes-list" aria-live="polite"></div>
+      <p id="menu-app-patchnotes-empty" class="menu-app-patchnotes-empty" hidden data-i18n="menu.patchNotes.empty">Nenhuma atualizacao registrada ainda.</p>
+    </div>
+  </div>
+
+  <script src="common.js"></script>
+  <script src="i18n.js"></script>
+<script src="i18n-extra.js"></script>
+  <script src="pwa-register.js"></script>
+  <script src="auth.js"></script>
+  <script src="menu.js"></script>
+</body>
+</html>
+
+

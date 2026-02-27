@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#081427">
+  <meta name="application-name" content="Finances">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Finances">
+  <link rel="manifest" href="/manifest.webmanifest?v=20260226-26">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <title>Dev Tools | Finances</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="pagina-dev-tools">
+  <main class="dev-tools-shell">
+    <header class="dev-tools-hero" aria-label="Painel de desenvolvimento">
+      <div class="dev-tools-hero-main">
+        <p class="dev-tools-kicker">Modo Desenvolvedor</p>
+        <h1>Central DEV</h1>
+        <p class="dev-tools-subtitulo">
+          Ferramentas internas para manutencao, diagnostico, simulacao de eventos e operacoes rapidas do aplicativo.
+        </p>
+        <p id="dev-tools-feedback" class="dev-tools-feedback" aria-live="polite"></p>
+      </div>
+
+      <div class="dev-tools-hero-actions menu-app-hero-actions">
+        <button type="button" class="dev-tools-btn dev-tools-btn-ghost" id="dev-tools-btn-menu">
+          <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
+          <span>Menu</span>
+        </button>
+        <button type="button" class="dev-tools-btn dev-tools-btn-ghost" id="dev-tools-btn-patchnotes">
+          <i class="fa-solid fa-clipboard-list" aria-hidden="true"></i>
+          <span>Patch notes</span>
+        </button>
+        <button type="button" class="dev-tools-btn dev-tools-btn-ghost" id="dev-tools-btn-tema">
+          <i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i>
+          <span>Tema</span>
+        </button>
+        <button type="button" class="dev-tools-btn dev-tools-btn-danger" id="dev-tools-btn-sair">
+          <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+          <span>Sair</span>
+        </button>
+        <div class="dev-tools-usuario" aria-live="polite">
+          <span class="dev-tools-usuario-icone" aria-hidden="true"><i class="fa-solid fa-user-gear"></i></span>
+          <div class="dev-tools-usuario-textos">
+            <small id="dev-tools-usuario-papel">Sessao protegida</small>
+            <strong id="dev-tools-usuario-nome">Carregando usuario...</strong>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="dev-tools-grid">
+      <section class="dev-tools-card">
+        <div class="dev-tools-card-head">
+          <div>
+            <p class="dev-tools-card-kicker">Acoes rapidas</p>
+            <h2>Ferramentas de manutencao</h2>
+          </div>
+        </div>
+
+        <div class="dev-tools-quick-grid">
+          <button type="button" class="dev-tools-quick-btn" data-dev-quick-action="clear-localstorage">
+            <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+            <span>Limpar localStorage</span>
+          </button>
+          <button type="button" class="dev-tools-quick-btn" data-dev-quick-action="clear-pwa-cache">
+            <i class="fa-solid fa-broom" aria-hidden="true"></i>
+            <span>Limpar cache PWA</span>
+          </button>
+          <button type="button" class="dev-tools-quick-btn" data-dev-quick-action="force-sw-update">
+            <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i>
+            <span>Forcar update do SW</span>
+          </button>
+          <button type="button" class="dev-tools-quick-btn" data-dev-quick-action="export-data">
+            <i class="fa-solid fa-box-archive" aria-hidden="true"></i>
+            <span>Exportar dados</span>
+          </button>
+          <button type="button" class="dev-tools-quick-btn" data-dev-quick-action="show-logs">
+            <i class="fa-solid fa-bug" aria-hidden="true"></i>
+            <span>Ver logs</span>
+          </button>
+          <button type="button" class="dev-tools-quick-btn" data-dev-quick-action="open-patchnotes">
+            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+            <span>Editar patch notes</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="dev-tools-card">
+        <div class="dev-tools-card-head">
+          <div>
+            <p class="dev-tools-card-kicker">Simulador de eventos</p>
+            <h2>Fluxos de pagamento e webhook</h2>
+          </div>
+          <div class="dev-tools-inline-fields">
+            <label>
+              <span>Valor (R$)</span>
+              <input type="number" id="dev-sim-amount" min="0" step="0.01" value="49.90">
+            </label>
+            <label>
+              <span>Referencia</span>
+              <input type="text" id="dev-sim-reference" placeholder="pedido-123">
+            </label>
+          </div>
+        </div>
+
+        <div class="dev-tools-sim-grid">
+          <button type="button" class="dev-tools-sim-btn is-approved" data-dev-sim="approved">
+            <i class="fa-solid fa-credit-card" aria-hidden="true"></i>
+            <span>Pagamento aprovado</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn is-rejected" data-dev-sim="rejected">
+            <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
+            <span>Pagamento recusado</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn is-pending" data-dev-sim="pending">
+            <i class="fa-solid fa-hourglass-half" aria-hidden="true"></i>
+            <span>Pagamento pendente</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn is-duplicate" data-dev-sim="duplicate">
+            <i class="fa-solid fa-copy" aria-hidden="true"></i>
+            <span>Webhook duplicado</span>
+          </button>
+        </div>
+
+        <div class="dev-tools-subgrid">
+          <section class="dev-tools-subcard">
+            <div class="dev-tools-subcard-head">
+              <h3>Ultimo payload simulado</h3>
+              <button type="button" class="dev-tools-text-btn" id="dev-sim-copy-payload">Copiar JSON</button>
+            </div>
+            <pre id="dev-sim-payload" class="dev-tools-code-block">{\n  "status": "aguardando simulacao"\n}</pre>
+          </section>
+
+          <section class="dev-tools-subcard">
+            <div class="dev-tools-subcard-head">
+              <h3>Historico do simulador</h3>
+              <button type="button" class="dev-tools-text-btn" id="dev-sim-clear-history">Limpar</button>
+            </div>
+            <ul id="dev-sim-history" class="dev-tools-list"></ul>
+          </section>
+        </div>
+      </section>
+
+      <section class="dev-tools-card">
+        <div class="dev-tools-card-head">
+          <div>
+            <p class="dev-tools-card-kicker">Teste de notificacoes</p>
+            <h2>PWA / lembretes locais</h2>
+          </div>
+          <div class="dev-tools-card-actions">
+            <button type="button" class="dev-tools-btn dev-tools-btn-ghost" id="dev-notify-permission">
+              <i class="fa-solid fa-bell" aria-hidden="true"></i>
+              <span>Ativar notificacoes</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="dev-tools-inline-fields">
+          <label>
+            <span>Nome do cliente</span>
+            <input type="text" id="dev-notify-name" value="Joao" placeholder="Joao">
+          </label>
+          <label>
+            <span>WhatsApp</span>
+            <input type="text" id="dev-notify-phone" value="11999999999" placeholder="11999999999">
+          </label>
+          <label>
+            <span>Valor (R$)</span>
+            <input type="number" id="dev-notify-amount" min="0" step="0.01" value="89.90">
+          </label>
+          <label>
+            <span>Saldo carteira (R$)</span>
+            <input type="number" id="dev-notify-wallet" min="-999999" step="0.01" value="25.00">
+          </label>
+          <label>
+            <span>Meta economia (R$)</span>
+            <input type="number" id="dev-notify-goal" min="0" step="0.01" value="500.00">
+          </label>
+          <label>
+            <span>Poupanca atual (R$)</span>
+            <input type="number" id="dev-notify-savings" min="0" step="0.01" value="520.00">
+          </label>
+        </div>
+
+        <div class="dev-tools-sim-grid dev-tools-notify-grid">
+          <button type="button" class="dev-tools-sim-btn is-approved" data-dev-notify="payment-completed-manual">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+            <span>Pagamento concluido (manual)</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn is-approved" data-dev-notify="payment-completed-mp">
+            <i class="fa-solid fa-wallet" aria-hidden="true"></i>
+            <span>Pagamento concluido (Mercado Pago)</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn is-rejected" data-dev-notify="mercadopago-failed">
+            <i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>
+            <span>Pagamento MP falhou</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn is-pending" data-dev-notify="cobranca-hoje">
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+            <span>Cobranca vence hoje (WhatsApp)</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn is-pending" data-dev-notify="cobranca-amanha">
+            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+            <span>Cobranca vence amanha (WhatsApp)</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn" data-dev-notify="despesa-hoje">
+            <i class="fa-solid fa-file-invoice-dollar" aria-hidden="true"></i>
+            <span>Despesa vence hoje</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn" data-dev-notify="despesa-amanha">
+            <i class="fa-solid fa-file-invoice-dollar" aria-hidden="true"></i>
+            <span>Despesa vence amanha</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn is-rejected" data-dev-notify="wallet-zero">
+            <i class="fa-solid fa-wallet" aria-hidden="true"></i>
+            <span>Carteira zerada</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn is-pending" data-dev-notify="wallet-low">
+            <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+            <span>Saldo baixo</span>
+          </button>
+          <button type="button" class="dev-tools-sim-btn is-approved" data-dev-notify="savings-goal">
+            <i class="fa-solid fa-piggy-bank" aria-hidden="true"></i>
+            <span>Meta de economia atingida</span>
+          </button>
+        </div>
+
+        <div class="dev-tools-subgrid">
+          <section class="dev-tools-subcard">
+            <div class="dev-tools-subcard-head">
+              <h3>Ultima notificacao simulada</h3>
+              <button type="button" class="dev-tools-text-btn" id="dev-notify-copy-payload">Copiar JSON</button>
+            </div>
+            <pre id="dev-notify-payload" class="dev-tools-code-block">{\n  "status": "aguardando teste de notificacao"\n}</pre>
+          </section>
+          <section class="dev-tools-subcard">
+            <div class="dev-tools-subcard-head">
+              <h3>Dicas</h3>
+            </div>
+            <ul class="dev-tools-list">
+              <li class="dev-tools-list-item">Permita notificacoes no navegador/PWA antes de testar.</li>
+              <li class="dev-tools-list-item">Toque na notificacao de cobranca para abrir o WhatsApp com mensagem pronta.</li>
+              <li class="dev-tools-list-item">As notificacoes de despesa/saldo/meta abrem as telas correspondentes do app.</li>
+            </ul>
+          </section>
+        </div>
+      </section>
+
+      <section class="dev-tools-card">
+        <div class="dev-tools-card-head">
+          <div>
+            <p class="dev-tools-card-kicker">Auditor de seguranca interno</p>
+            <h2>Checagens rapidas do ambiente</h2>
+          </div>
+          <div class="dev-tools-card-actions">
+            <button type="button" class="dev-tools-btn dev-tools-btn-ghost" id="dev-audit-copy">
+              <i class="fa-solid fa-copy" aria-hidden="true"></i>
+              <span>Copiar diagnostico</span>
+            </button>
+            <button type="button" class="dev-tools-btn" id="dev-audit-run">
+              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+              <span>Rodar auditoria</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="dev-audit-results" class="dev-tools-audit-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="dev-tools-card" id="dev-tools-logs-card">
+        <div class="dev-tools-card-head">
+          <div>
+            <p class="dev-tools-card-kicker">Logs internos</p>
+            <h2>Historico de acoes e diagnosticos</h2>
+          </div>
+          <div class="dev-tools-card-actions">
+            <button type="button" class="dev-tools-btn dev-tools-btn-ghost" id="dev-logs-export">
+              <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+              <span>Exportar logs</span>
+            </button>
+            <button type="button" class="dev-tools-btn dev-tools-btn-ghost" id="dev-logs-clear">
+              <i class="fa-solid fa-trash" aria-hidden="true"></i>
+              <span>Limpar logs</span>
+            </button>
+          </div>
+        </div>
+
+        <ul id="dev-tools-log-list" class="dev-tools-log-list" aria-live="polite"></ul>
+      </section>
+    </section>
+  </main>
+
+  <div id="dev-tools-toast" class="dev-tools-toast" hidden aria-live="polite"></div>
+
+  <script src="common.js"></script>
+  <script src="i18n.js"></script>
+  <script src="i18n-extra.js"></script>
+  <script src="pwa-register.js"></script>
+  <script src="auth.js"></script>
+  <script src="dev-tools.js"></script>
+</body>
+</html>
+
+

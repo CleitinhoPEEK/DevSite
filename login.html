@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#081427">
+  <meta name="application-name" content="Finances">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Finances">
+  <link rel="manifest" href="/manifest.webmanifest?v=20260226-26">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <title>Acesso ao sistema</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="pagina-login">
+  <main class="login-shell">
+    <section class="login-card" aria-labelledby="login-titulo">
+      <div class="login-brand">
+        <img src="logo2.png" alt="Nexo" loading="lazy" decoding="async">
+        <h1 id="login-titulo">Entrar no sistema</h1>
+        <p id="login-subtitulo">Use seu usuÃ¡rio e senha para acessar.</p>
+      </div>
+
+      <form id="login-form" class="login-form" autocomplete="off">
+        <label for="login-usuario">UsuÃ¡rio</label>
+        <input id="login-usuario" type="text" placeholder="Seu usuÃ¡rio" autocomplete="username" required>
+
+        <label for="login-senha">Senha</label>
+        <input id="login-senha" type="password" placeholder="Sua senha" autocomplete="current-password" required>
+
+        <button id="login-submit" type="submit" class="btn-acao-principal">Entrar</button>
+      </form>
+
+      <p id="login-feedback" class="login-feedback" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="common.js"></script>
+<script src="i18n.js"></script>
+<script src="i18n-extra.js"></script>
+<script src="pwa-register.js"></script>
+  <script src="auth.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#081427">
+  <meta name="application-name" content="Finances">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Finances">
+  <link rel="manifest" href="/manifest.webmanifest?v=20260226-26">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <title>Controle de Despesas</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="pagina-despesas">
+
+<section id="notificacoes-despesas" class="notificacoes-hoje notificacoes-despesas" aria-live="polite" hidden>
+  <button id="btn-notificacoes-despesas" class="notificacoes-trigger" type="button" aria-label="Abrir alertas de despesas" aria-expanded="false" aria-controls="notificacoes-despesas-painel">
+    <i class="fa-solid fa-bell" aria-hidden="true"></i>
+    <span id="notificacoes-despesas-badge" class="notificacoes-badge">0</span>
+  </button>
+  <div id="notificacoes-despesas-painel" class="notificacoes-painel" hidden>
+    <div class="notificacoes-header">
+      <i class="fa-solid fa-bell" aria-hidden="true"></i>
+      <strong>Alertas de despesas</strong>
+    </div>
+    <ul id="notificacoes-despesas-lista" class="notificacoes-lista"></ul>
+  </div>
+</section>
+
+<div class="app-container has-floating-back sidebar-closed" id="app-wrapper">
+  <div id="overlay-mobile" onclick="toggleSidebar()"></div>
+  <button id="toggle-sidebar" onclick="toggleSidebar()" aria-label="Abrir menu">
+    <img src="logo2.png" alt=" loading="lazy" decoding="async">
+  </button>
+  <button class="btn-voltar-flutuante" onclick="voltarComSidebarFechada('index.html')" aria-label="Ir para inÃ­cio">
+    <i class="fa-solid fa-arrow-left"></i>
+  </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="botoes-financeiros">
+      <button onclick="voltarComSidebarFechada('index.html')" class="btn-card btn-voltar-sidebar" aria-label="Ir para inÃ­cio">
+        <i class="fa-solid fa-house"></i>
+        <span>InÃ­cio</span>
+      </button>
+        <button class="btn-card btn-menu-app" onclick="voltarComSidebarFechada('menu.html')" aria-label="Abrir menu do aplicativo">
+          <i class="fa-solid fa-table-cells-large"></i>
+          <span>Menu</span>
+        </button>
+
+
+
+<button onclick="window.location.href='economias.html'" class="btn-card btn-economias">
+        <i class="fa-solid fa-piggy-bank"></i>
+        <span>Economias</span>
+      </button>
+      </div>
+
+      <nav id="menu-meses" class="menu-meses-grid"></nav>
+
+      <div class="backup-area">
+      <button class="btn-backup btn-backup-executive" onclick="irParaResumoAnoExecutivo()">
+        <i class="fa-solid fa-user-tie"></i>
+        <span>Executivo</span>
+      </button>
+
+      <button id="btn-tema" class="btn-tema-toggle" onclick="alternarTema()">
+        Mudar Tema
+      </button>
+
+      <div class="configuracoes-menu">
+        <button type="button" class="btn-configuracoes-toggle" onclick="togglePainelConfiguracoes(this)" aria-expanded="false">
+          <span class="btn-configuracoes-principal">
+            <i class="fa-solid fa-gear"></i>
+            <span>ConfiguraÃ§Ãµes</span>
+          </span>
+          <i class="fa-solid fa-chevron-down config-seta"></i>
+        </button>
+
+        <div class="configuracoes-menu-conteudo" aria-hidden="true">
+          <button class="btn-backup btn-backup-export" onclick="exportarDados()">
+            <i class="fa-solid fa-file-export"></i>
+            <span>Exportar backup</span>
+          </button>
+          <button class="btn-backup btn-backup-import" onclick="document.getElementById('input-import').click()">
+            <i class="fa-solid fa-file-import"></i>
+            <span>Importar backup</span>
+          </button>
+          <input type="file" id="input-import" style="display:none" onchange="importarDados(event)" accept=".json">
+
+          <hr class="backup-divider">
+
+          <button class="btn-reset" onclick="resetarSistema()">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Zerar tudo</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="cabecalho-despesas">
+      <div class="titulo-despesas-wrap">
+        <h1 class="titulo-despesas">Despesas Fixas e Contas</h1>
+        <p class="subtitulo-despesas">Acompanhe pendÃªncias, pagamentos e o total do perÃ­odo em um painel simples.</p>
+      </div>
+
+      <div class="dashboard dashboard-despesas" id="placar-despesas">
+        <div class="card card-pagar">
+          <h3>Total a Pagar</h3>
+          <p id="totalPagar">R$ 0,00</p>
+        </div>
+
+        <div class="card card-pago">
+          <h3>Total Pago</h3>
+          <p id="totalPago">R$ 0,00</p>
+        </div>
+
+        <div class="card card-geral">
+          <h3>Total Geral</h3>
+          <p id="totalGeral">R$ 0,00</p>
+        </div>
+      </div>
+
+      <button id="btn-abrir-cadastro" onclick="toggleFormDespesa()">
+        <span class="btn-text">Nova Despesa</span>
+        <span class="btn-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+      </button>
+
+      <div class="tabs tabs-despesas">
+        <button class="tab-btn active" onclick="filtrarDespesas('todos', this)">Todas</button>
+        <button class="tab-btn" onclick="filtrarDespesas('pendente', this)">Pendentes</button>
+        <button class="tab-btn" onclick="filtrarDespesas('pago', this)">Pagas</button>
+        <button class="tab-btn" onclick="filtrarDespesas('atrasado', this)">Atrasadas</button>
+      </div>
+    </header>
+
+    <ul id="listaDespesas"></ul>
+  </main>
+</div>
+
+<div id="modalDespesa" class="modal-geral">
+  <div class="modal-content">
+    <span class="close-modal" onclick="toggleFormDespesa()">&times;</span>
+
+    <h3 id="tituloModal">Cadastrar Conta</h3>
+
+    <div class="form-grid">
+      <input type="text" id="nomeDespesa" placeholder="Nome da conta">
+
+      <div class="linha-dupla">
+        <input type="number" id="valorDespesa" placeholder="Valor">
+        <input type="date" id="dataVencimento">
+      </div>
+
+      <select id="statusDespesa">
+        <option value="pendente">Pendente</option>
+        <option value="pago">Pago</option>
+      </select>
+
+      <label class="recorrente-label">
+        <input type="checkbox" id="recorrenteDespesa">
+        <span id="recorrente-despesa-label-texto">Recorrente mensal</span>
+      </label>
+
+      <button type="button" class="btn-acao-secundaria btn-escanear-despesa-form" onclick="abrirModalEscanearDespesa()">
+        <i class="fa-solid fa-camera" aria-hidden="true"></i>
+        <span>Adicionar por QR / codigo / foto</span>
+      </button>
+
+      <button class="btn-acao-principal" onclick="salvarDespesa()">
+        Salvar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="modalEscanearDespesa" class="modal-geral modal-escanear-despesa">
+  <div class="modal-content modal-escanear-despesa-content" role="dialog" aria-modal="true" aria-labelledby="tituloModalEscanearDespesa">
+    <span class="close-modal" onclick="fecharModalEscanearDespesa()">&times;</span>
+
+    <h3 id="tituloModalEscanearDespesa">Escanear recibo / conta</h3>
+    <p class="scanner-despesa-subtitulo">Leia QR Code, codigo de barras ou use foto para OCR e preencher a despesa automaticamente.</p>
+
+    <div class="scanner-despesa-grid">
+      <section class="scanner-despesa-painel">
+        <div class="scanner-despesa-preview" id="scanner-despesa-preview">
+          <video id="scannerDespesaVideo" playsinline autoplay muted hidden></video>
+          <img id="scannerDespesaImagem" alt="Pre-visualizacao da imagem da despesa" hidden>
+          <canvas id="scannerDespesaCanvas" hidden></canvas>
+          <div id="scannerDespesaPlaceholder" class="scanner-despesa-placeholder">
+            <i class="fa-solid fa-receipt" aria-hidden="true"></i>
+            <span>Abra a camera ou selecione uma foto</span>
+          </div>
+        </div>
+
+        <div class="scanner-despesa-acoes">
+          <button type="button" id="btnScannerDespesaCamera" class="btn-acao-secundaria">
+            <i class="fa-solid fa-camera" aria-hidden="true"></i>
+            <span>Abrir camera</span>
+          </button>
+          <button type="button" id="btnScannerDespesaDetectarCodigo" class="btn-acao-secundaria">
+            <i class="fa-solid fa-qrcode" aria-hidden="true"></i>
+            <span>Ler QR / barras</span>
+          </button>
+          <button type="button" id="btnScannerDespesaFoto" class="btn-acao-secundaria">
+            <i class="fa-solid fa-image" aria-hidden="true"></i>
+            <span>Galeria / foto</span>
+          </button>
+          <button type="button" id="btnScannerDespesaOCR" class="btn-acao-principal" disabled>
+            <i class="fa-solid fa-font" aria-hidden="true"></i>
+            <span>Processar foto (OCR)</span>
+          </button>
+          <input type="file" id="inputScannerDespesaArquivo" accept="image/*" capture="environment" hidden>
+        </div>
+      </section>
+
+      <section class="scanner-despesa-painel">
+        <div id="scannerDespesaStatus" class="scanner-despesa-status">Pronto para escanear.</div>
+
+        <div class="scanner-despesa-progresso-wrap">
+          <div class="scanner-despesa-progresso-bar">
+            <div id="scannerDespesaProgressoFill" class="scanner-despesa-progresso-fill"></div>
+          </div>
+          <span id="scannerDespesaProgressoTexto" class="scanner-despesa-progresso-texto">0%</span>
+        </div>
+
+        <div class="scanner-despesa-preview-campos">
+          <div class="scanner-despesa-campo-preview">
+            <small>Nome</small>
+            <strong id="scannerDespesaPreviewNome">-</strong>
+          </div>
+          <div class="scanner-despesa-campo-preview">
+            <small>Valor</small>
+            <strong id="scannerDespesaPreviewValor">-</strong>
+          </div>
+          <div class="scanner-despesa-campo-preview">
+            <small>Data</small>
+            <strong id="scannerDespesaPreviewData">-</strong>
+          </div>
+          <div class="scanner-despesa-campo-preview">
+            <small>Origem</small>
+            <strong id="scannerDespesaPreviewOrigem">-</strong>
+          </div>
+        </div>
+
+        <label for="scannerDespesaTextoBruto" class="scanner-despesa-texto-label">Texto / codigo lido</label>
+        <textarea id="scannerDespesaTextoBruto" class="scanner-despesa-textarea" rows="8" readonly placeholder="Resultado do QR/codigo de barras/OCR aparece aqui..."></textarea>
+      </section>
+    </div>
+
+    <div class="scanner-despesa-rodape">
+      <button type="button" id="btnScannerDespesaAplicar" class="btn-acao-principal" disabled>
+        <i class="fa-solid fa-check" aria-hidden="true"></i>
+        <span>Aplicar na despesa</span>
+      </button>
+      <button type="button" id="btnScannerDespesaCancelar" class="btn-acao-secundaria" onclick="fecharModalEscanearDespesa()">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        <span>Cancelar</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="brand-logo brand-logo--watermark" aria-hidden="true">
+  <img src="logo2.png" alt=" loading="lazy" decoding="async">
+</div>
+
+<script src="common.js"></script>
+<script src="i18n.js"></script>
+<script src="i18n-extra.js"></script>
+<script src="pwa-register.js"></script>
+<script src="auth.js"></script>
+<script src="despesas.js"></script>
+<script src="escanear-despesa.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
